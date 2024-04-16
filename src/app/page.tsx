@@ -1,17 +1,24 @@
-import type { Metadata } from 'next'
+import 'antd/dist/reset.css'
 
-import { Main } from '~/components/main'
+import { Button, Input } from 'antd'
+import React from 'react'
 
-const data = {
-  title: 'Next.js Boilerplate',
-  description: 'Next.js, TypeScript, Tailwind, Storybook, Vitest, Cypress and Testing-Library',
+
+
+const page = () => {
+  return (
+    <div className='w-full flex'>
+      <div className='m-auto w-[70%] bg-[#e0e0e0] h-[100vh]'>
+        <div className='w-full flex justify-center'>
+          <div className='text-[32px] font-semibold'>Users</div>
+        </div>
+        <div>
+
+          <Button type="primary">Primary Button</Button>
+        </div>
+      </div>
+    </div>
+  )
 }
 
-export const metadata: Metadata = {
-  title: data.title,
-  description: data.description,
-}
-
-export default function Home() {
-  return <Main title={data.title} description={data.description} />
-}
+export default page
