@@ -15,6 +15,7 @@ const page = () => {
 
   const handleAddUser = (userData: any) => {
     axios.post(BASE_URL + 'users', userData).then((res) => {
+      getUsers()
       console.log(res.data, "post data");
     }).catch((e: any) => {
       console.log(e)
@@ -47,7 +48,7 @@ const page = () => {
 
           <Form onSubmit={handleAddUser} />
 
-          <Users users={users} />
+          <Users users={users} setUsers={setUsers} />
 
         </div>
       </div>

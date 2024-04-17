@@ -1,13 +1,51 @@
-import React, { useEffect } from 'react';
-import { List, Button } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { List, Button, Modal } from 'antd';
 import Link from 'next/link';
+import axios from 'axios'; // Import Axios
+import { BASE_URL } from '~/env';
 
 interface UsersProps {
     users: any[];
+    setUsers: any;
 }
 
-const Users: React.FC<UsersProps> = ({ users }) => {
-    useEffect(() => { console.log(users, "users") }, [users])
+const Users = ({ users, setUsers }: UsersProps) => {
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
+    const [selectedUser, setSelectedUser] = useState<string>('')
+    const getUsers = () => {
+        axios
+            .get(BASE_URL + "users")
+            .then((res) => {
+                setUsers(res.data);
+            })
+            .catch((e) => {
+                console.log(e);
+            });
+    };
+
+    const deleteUser = async (userId: string) => {
+        try {
+            await axios.delete(BASE_URL + `users/${userId}`).then((res) => {
+                getUsers()
+            });
+        } catch (error) {
+            console.error('Error deleting user:', error);
+        }
+    };
+    const showDeleteModal = (id: string) => {
+        setSelectedUser(id)
+        setIsDeleteModalOpen(true);
+    };
+
+    const handleDeleteOk = () => {
+        deleteUser(selectedUser);
+        setIsDeleteModalOpen(false);
+    };
+
+    const handleDeleteCancel = () => {
+        setIsDeleteModalOpen(false);
+    };
+
     return (
         <div className='mt-4'>
             <div className='text-lg font-semibold'>User List</div>
@@ -16,7 +54,7 @@ const Users: React.FC<UsersProps> = ({ users }) => {
                 renderItem={(user: any, index: number) => (
                     <List.Item key={index}>
                         <div>
-                            <strong>Name:</strong> {user.name}
+                            <strong>Name:</strong> {user.name.length > 8 ? user.name.substring(0, 8) + "..." : user.name}
                         </div>
                         <div>
                             <strong>Age:</strong> {user.age}
@@ -27,14 +65,23 @@ const Users: React.FC<UsersProps> = ({ users }) => {
                         <div>
                             <strong>Occupation:</strong> {user.occupation}
                         </div>
-                        <Link href={`/Profile/${user.userId}`}>
-                            <Button type='primary' className='mt-2'>
-                                View Profile
+                        <div className='flex items-center'>
+                            <Link href={`/Profile/${user.userId}`}>
+                                <Button className='ml-2' type='primary'>View Profile</Button>
+                            </Link>
+                            <Button className='ml-2'
+                                // onClick={() => deleteUser(user.id)}
+                                onClick={() => showDeleteModal(user.id)}
+                            >
+                                Delete
                             </Button>
-                        </Link>
+                        </div>
                     </List.Item>
                 )}
             />
+            <Modal open={isDeleteModalOpen} onOk={handleDeleteOk} onCancel={handleDeleteCancel} okText="Delete">
+                Are you sure to delete the user?
+            </Modal>
         </div>
     );
 };
