@@ -3,16 +3,15 @@ const userService = require('../services/userService');
 
 
 const getUsers = async (req, res) => {
-
     try {
-
         const users = await userService.getUsers();
-        console.log('hello getUsers')
+        res.setHeader('Access-Control-Allow-Origin', '*');
         res.json(users);
     } catch (error) {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };
+
 
 const getUserById = async (req, res) => {
     const { id } = req.params;

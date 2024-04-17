@@ -1,16 +1,13 @@
 const db = require('../db');
+const uuid = require('uuid');
 
-// const db = require('../db');
 
-// db.query('SELECT NOW()', (err, res) => {
-//     console.log(err, res);
-// });
 
 
 const getUsers = async () => {
     try {
         const { rows } = await db.query('SELECT * FROM users');
-        console.log('Data retrieved:', rows);
+        // console.log('Data retrieved:', rows);
         return rows;
     } catch (error) {
         console.error('Error during getUsers:', error);
@@ -29,8 +26,9 @@ const getUserById = async (id) => {
 };
 
 const addUser = async (name, age, gender, occupation) => {
+    const id = uuid.v4();
     try {
-        const { rows } = await db.query('INSERT INTO users (name, age, gender, occupation) VALUES ($1, $2, $3, $4) RETURNING *', [name, age, gender, occupation]);
+        const { rows } = await db.query('INSERT INTO users (id, name, age, gender, occupation) VALUES ($1, $2, $3, $4, $5) RETURNING *', [id, name, age, gender, occupation]);
         return rows[0];
     } catch (error) {
         console.error('Error during addUser:', error);
