@@ -1,8 +1,13 @@
 const userService = require('../services/userService');
 
+
+
 const getUsers = async (req, res) => {
+
     try {
+
         const users = await userService.getUsers();
+        console.log('hello getUsers')
         res.json(users);
     } catch (error) {
         res.status(500).json({ error: 'Internal Server Error' });
