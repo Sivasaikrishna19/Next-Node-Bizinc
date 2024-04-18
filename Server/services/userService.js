@@ -1,5 +1,6 @@
 const db = require('../db');
 const uuid = require('uuid');
+const bcrypt = require('bcryptjs');
 
 
 
@@ -7,7 +8,6 @@ const uuid = require('uuid');
 const getUsers = async () => {
     try {
         const { rows } = await db.query('SELECT * FROM users');
-        // console.log('Data retrieved:', rows);
         return rows;
     } catch (error) {
         console.error('Error during getUsers:', error);
@@ -55,6 +55,33 @@ const deleteUser = async (id) => {
         return null;
     }
 };
+const addAdmin = async (email, password) => {
+    const id = uuid.v4();
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    try {
+        const { rows } = await db.query(
+            'INSERT INTO admins (id, email, password) VALUES ($1, $2, $3) RETURNING id, email',
+            [id, email, hashedPassword]
+        );
+        return rows[0];
+    } catch (error) {
+        console.error('Error during addAdmin:', error);
+        return null;
+    }
+};
+const getAdminByEmail = async (email) => {
+    try {
+        const { rows } = await db.query(
+            'SELECT id, email, password FROM admins WHERE email = $1',
+            [email]
+        );
+        return rows[0] || null;
+    } catch (error) {
+        console.error('Error during getAdminByEmail:', error);
+        return null;
+    }
+};
 
 module.exports = {
     getUsers,
@@ -62,4 +89,7 @@ module.exports = {
     addUser,
     updateUser,
     deleteUser,
+    addAdmin,
+    getAdminByEmail
+
 };
