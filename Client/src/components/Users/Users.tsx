@@ -66,11 +66,10 @@ const Users = ({ users, setUsers }: UsersProps) => {
                             <strong>Occupation:</strong> {user.occupation}
                         </div>
                         <div className='flex items-center'>
-                            <Link href={`/Profile/${user.userId}`}>
+                            <Link href={`/Profile/${user.id}`}>
                                 <Button className='ml-2' type='primary'>View Profile</Button>
                             </Link>
                             <Button className='ml-2'
-                                // onClick={() => deleteUser(user.id)}
                                 onClick={() => showDeleteModal(user.id)}
                             >
                                 Delete
