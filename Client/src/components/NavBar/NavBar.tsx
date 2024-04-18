@@ -1,32 +1,32 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation'; // Correct the import
+import { useRouter } from 'next/navigation';
 
 const NavBar = () => {
-    const [token, setToken] = useState<boolean>(false); // Assume not logged in initially
+    const [token, setToken] = useState<boolean>(false);
     const router = useRouter();
 
     useEffect(() => {
-        // Create a function to update the token state
+
         const updateToken = () => {
             const token = localStorage.getItem('token');
-            setToken(!!token); // Convert to boolean, true if token exists, false otherwise
+            setToken(!!token);
         };
 
-        updateToken(); // Call when component mounts
+        updateToken();
 
-        // Optional: Listen for custom events if needed for other parts of the app to communicate
-        window.addEventListener('storage', updateToken); // Listen for changes in storage
+
+        window.addEventListener('storage', updateToken);
 
         return () => {
-            window.removeEventListener('storage', updateToken); // Clean up listener
+            window.removeEventListener('storage', updateToken);
         };
-    }, []); // Empty array means this effect only runs once after the initial render
+    }, []);
 
     const handleLogout = () => {
         localStorage.removeItem('token');
-        setToken(false); // Update state to reflect logged out status
-        router.push('/Login'); // Redirect to login page
+        setToken(false);
+        router.push('/Login');
     };
 
     return (

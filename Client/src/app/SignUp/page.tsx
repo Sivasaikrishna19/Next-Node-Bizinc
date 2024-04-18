@@ -4,7 +4,7 @@ import { Form, Input, Button, message } from 'antd';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { BASE_URL } from '~/env';
-import Link from 'next/link';
+
 
 
 const Signup = () => {

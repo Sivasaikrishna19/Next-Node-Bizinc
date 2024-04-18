@@ -4,7 +4,7 @@ import axios from 'axios';
 import { BASE_URL } from '~/env';
 import { Button, Drawer, Form, Input, message } from 'antd';
 import NavBar from '~/components/NavBar/NavBar';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 const Profile = () => {
     const router = usePathname();

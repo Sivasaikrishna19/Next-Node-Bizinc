@@ -11,17 +11,29 @@ const SECRET_KEY = '9f8b7c6d8e9a7b8c9d0aebfcadbec9f8b7c6d8e9a7b8c9d0aebfcadbec9f
 
 const app = express();
 
+function requestLoggerMiddleware(req, res, next) {
+    const now = new Date();
+    console.log(`${now.toISOString()} - ${req.method} ${req.originalUrl}`);
+
+
+    console.log('Headers:', req.headers);
+    console.log('Body:', req.body);
+
+    next();
+}
+
 app.use(session({
-    secret: 'secret',  // Change to use environment variable in production
+    secret: 'secret',
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false }  // Change to true if using HTTPS
+    cookie: { secure: false }
 }));
 
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(cors());
 app.use(express.json());
+app.use(requestLoggerMiddleware);
 
 passport.use(new LocalStrategy(
     { usernameField: 'email' },
