@@ -1,19 +1,30 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Input, Button, message } from 'antd';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 import { BASE_URL } from '~/env';
 
 const Login = () => {
     const [loading, setLoading] = useState(false);
+    const router = useRouter();
+
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            router.push('/');
+        }
+    }, [router]);
 
     const onFinish = async (values: any) => {
         try {
             setLoading(true);
             const response = await axios.post(BASE_URL + 'login', values);
+            localStorage.setItem('token', response.data.token);
             message.success('Login successful');
-            console.log(response.data);
             setLoading(false);
+            router.push('/');
         } catch (error: any) {
             message.error('Failed to login');
             setLoading(false);
@@ -46,6 +57,11 @@ const Login = () => {
                     <Button type="primary" htmlType="submit" className="w-full" loading={loading}>
                         Log in
                     </Button>
+                </Form.Item>
+                <Form.Item>
+                    <div className="text-center">
+                        <p className="text-gray-500">Not a member? <a href="/SignUp" className="text-blue-600 hover:underline">Sign up now</a></p>
+                    </div>
                 </Form.Item>
             </Form>
         </div>
