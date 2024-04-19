@@ -5,16 +5,16 @@ import Users from '~/components/UsersList/UsersList'
 import axios from 'axios'
 import { BASE_URL } from '~/env'
 import NavBar from '~/components/NavBar/NavBar'
+import { message } from 'antd'
 
 
 
 const page = () => {
     const [users, setUsers] = useState<any>([])
-
     const handleAddUser = (userData: any) => {
         axios.post(BASE_URL + 'users', userData).then((res) => {
+            message.success('User added successfully!');
             getUsers()
-            console.log(res.data, "post data");
         }).catch((e: any) => {
             console.log(e)
         })
